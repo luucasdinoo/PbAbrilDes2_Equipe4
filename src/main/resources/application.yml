@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: des2_equipe4
+  web:
+    locale: pt_BR
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/db_desafio2?useSSL=false&serverTimezone=America/Sao_paulo"
+    username: docker
+    password: docker
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+springdoc:
+  swagger-ui:
+    path: /docs-d2.html
+  api-docs:
+    path: /docs-d2
+  packagesToScan: br.com.backend.equipe4.controllers
