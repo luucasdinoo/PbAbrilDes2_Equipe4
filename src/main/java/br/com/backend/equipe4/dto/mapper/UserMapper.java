@@ -1,9 +1,8 @@
 package br.com.backend.equipe4.dto.mapper;
-import dto.UserDto;
+import br.com.backend.equipe4.dto.UserDto;
 import br.com.backend.equipe4.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 
 @Component
 public class UserMapper {
