@@ -4,17 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Entity
 @Table(name = "users")
-@Data @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @ToString
 public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private UUID id;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -26,7 +28,13 @@ public class User implements Serializable {
     private String summary;
 
     @Column(name = "birthdate", nullable = false, length = 10)
-    private LocalDateTime dateOfBirth;
+    private LocalDate birthdate;
+
+    public boolean isValidAge() {
+        LocalDate now = LocalDate.now();
+        LocalDate eighteenYearsAgo = now.minusYears(18);
+        return birthdate.isBefore(eighteenYearsAgo);
+    }
 
     @Column(name = "username", nullable = false, unique = true, length = 20)
     private String username;
