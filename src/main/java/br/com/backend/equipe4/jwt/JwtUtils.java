@@ -38,16 +38,17 @@ public class JwtUtils {
         return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public static JwtToken createJwtToken(String username) {
+    public static JwtToken createJwtToken(String username, String role) {
         Date issuedAt = new Date();
         Date limit = expireDate(issuedAt);
 
         String token = Jwts.builder()
-                .setHeaderParam("typ", "JWT")
-                .setSubject(username)
-                .setIssuedAt(issuedAt)
-                .setExpiration(limit)
-                .signWith(generateKey(), SignatureAlgorithm.HS256)
+                .header().add("typ", "JWT").and()
+                .subject(username)
+                .issuedAt(issuedAt)
+                .expiration(limit)
+                .signWith(generateKey())
+                .claim("role", role)
                 .compact();
 
         return new JwtToken(token);
@@ -85,6 +86,20 @@ public class JwtUtils {
             return true;
         } catch (JwtException e) {
             log.error(String.format("Token is not valid: %s", e.getMessage()));
+        }
+        return false;
+    }
+
+    public static boolean isTokenValid(String token){
+        try {
+            Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refactorToken(token));
+            return true;
+        }
+        catch (JwtException e){
+            log.error(String.format("Token invalid: %s", e.getMessage()));
         }
         return false;
     }

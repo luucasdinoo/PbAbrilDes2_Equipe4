@@ -46,4 +46,8 @@ public class UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow((() -> new RuntimeException("Username not found")));
     }
+
+    public User.Role getRoleByUsername(String username) {
+        return userRepository.findRoleByUsername(username);
+    }
 }

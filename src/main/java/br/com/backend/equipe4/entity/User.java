@@ -46,9 +46,17 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 25)
+    private Role role = Role.ROLE_USER;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "update_at")
     private LocalDateTime updatedAt;
+
+    public enum Role{
+        ROLE_USER
+    }
 }

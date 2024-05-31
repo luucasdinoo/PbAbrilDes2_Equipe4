@@ -1,25 +1,29 @@
 package br.com.backend.equipe4.jwt;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
+import java.util.UUID;
+
 
 public class JwtUserDetails extends User {
 
-    private User user;
+    private br.com.backend.equipe4.entity.User user;
 
-    public JwtUserDetails(User user) {
-        super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList());
+    public JwtUserDetails(br.com.backend.equipe4.entity.User user) {
+        super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().name()));
         this.user = user;
     }
 
-//    public Long getId(){
-//        return user.getId();
-//    }
+   public UUID getId(){
+       return this.user.getId();
+    }
 
     public String getUsername() {
-        return user.getUsername();
+        return this.user.getUsername();
+    }
+
+    public String getRole(){
+        return this.user.getRole().name();
     }
 }
