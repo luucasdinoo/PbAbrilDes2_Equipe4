@@ -1,6 +1,17 @@
 package br.com.backend.equipe4.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Slf4j
 public class JwtUtils {
@@ -17,6 +28,66 @@ public class JwtUtils {
 
     }
 
+    private static SecretKey generateKey() {
+        return Keys.hmacShaKeyFor(SECRETE_KEY.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private static Date expireDate(Date start) {
+        LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
+        return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static JwtToken createJwtToken(String username) {
+        Date issuedAt = new Date();
+        Date limit = expireDate(issuedAt);
+
+        String token = Jwts.builder()
+                .setHeaderParam("typ", "JWT")
+                .setSubject(username)
+                .setIssuedAt(issuedAt)
+                .setExpiration(limit)
+                .signWith(generateKey(), SignatureAlgorithm.HS256)
+                .compact();
+
+        return new JwtToken(token);
+    }
+
+    private static Claims getClaims(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refactorToken(token)).getPayload();
+        } catch (JwtException e) {
+            log.error(String.format("Token is not valid: %s", e.getMessage()));
+        }
+        return null;
+    }
+
+    private static String refactorToken(String token) {
+        if(token.contains(JWT_BEARER)){
+            return token.substring(JWT_BEARER.length());
+        }
+        return token;
+    }
+
+    public static String getUsernameFromToken(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public static Boolean isTokenExpired(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refactorToken(token));
+            return true;
+        } catch (JwtException e) {
+            log.error(String.format("Token is not valid: %s", e.getMessage()));
+        }
+        return false;
+    }
 }
 
 
