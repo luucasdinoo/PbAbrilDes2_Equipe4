@@ -27,6 +27,7 @@ public class User implements Serializable {
 
     @Column(name = "summary", nullable = true, length = 300)
     private String summary;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "birthdate", nullable = false, length = 10)
     private LocalDate birthdate;

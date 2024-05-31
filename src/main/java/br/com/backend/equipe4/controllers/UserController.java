@@ -64,7 +64,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Login into account", description = "Method for login in application",
+/*    @Operation(summary = "Login into account", description = "Method for login in application",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Login successfully.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
@@ -88,7 +88,7 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().body("Invalid email or password");
         }
-    }
+    }*/
 
 
     @Operation(summary = "Follow a user", description = "Method to follow a user by their user",
