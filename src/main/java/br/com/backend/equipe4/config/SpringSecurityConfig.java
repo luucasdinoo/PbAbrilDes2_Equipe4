@@ -38,13 +38,10 @@ public class SpringSecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                antMatcher(HttpMethod.POST, "/login"),
-                                antMatcher(HttpMethod.POST, "/register")
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/register").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
-                                .anyRequest().permitAll()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
