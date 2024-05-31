@@ -1,5 +1,6 @@
 package br.com.backend.equipe4.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -23,5 +24,6 @@ public class UserDto {
     private String password;
 
     @Past
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 }
