@@ -10,6 +10,7 @@ import br.com.backend.equipe4.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,11 @@ public class PostController {
         return ResponseEntity.ok(PostMapper.toDto(post));
     }
 
-    @PatchMapping()
-    public ResponseEntity<Void> updatePost(){
-        return null;
-        //TODO
+    //@PreAuthorize()
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Void> updatePost(@RequestBody PostCreateDto updateDto, @PathVariable Long id){
+        postService.updatePost(id, updateDto);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/home")

@@ -20,6 +20,13 @@ public class Comments {
     @Column(name = "date_comment")
     private LocalDateTime date;
 
+    @Column(name = "likes")
+    private int likes;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
+
     @JoinColumn(name = "post_id", nullable = false)
     @ManyToOne
     private Post post;
