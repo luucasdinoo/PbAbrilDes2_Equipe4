@@ -25,14 +25,17 @@ public class PostService {
     @Transactional
     public Post createPost(Post post, User user) {
 
-        Author author = authorService.saveAuthor(new Author(user.getFirstName() + " " + user.getLastName(), user.getUsername()));
+        Author author = authorService.getAuthorByUsername(user.getUsername());
+        if (author == null)
+            author = authorService.saveAuthor(new Author(user.getFirstName() + " " + user.getLastName(), user.getUsername()));
+
         post.setUser(user);
         post.setAuthor(author);
-        // author.getPosts().add(post);
-        post.setCreatedAt(LocalDateTime.now());
         post.setLikes(0);
         post.setNumberComments(0);
         post.setRetweets(0);
+        post.setCreatedAt(LocalDateTime.now());
+        author.getPosts().add(post);
         return postRepository.save(post);
     }
 

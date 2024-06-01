@@ -15,4 +15,8 @@ public class AuthorService {
     public Author saveAuthor(Author author) {
         return authorRepository.save(author);
     }
+
+    public Author getAuthorByUsername(String username) {
+        return authorRepository.findByUsername(username);
+    }
 }

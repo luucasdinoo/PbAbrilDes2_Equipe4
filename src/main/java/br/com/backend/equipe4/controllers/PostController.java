@@ -61,6 +61,7 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id){
         Post post = postService.getPostById(id);
@@ -96,6 +97,7 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/home")
     public ResponseEntity<Void> getPostsHome(){
         return null;
