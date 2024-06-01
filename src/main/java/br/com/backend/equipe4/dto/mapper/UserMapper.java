@@ -1,21 +1,38 @@
 package br.com.backend.equipe4.dto.mapper;
-import br.com.backend.equipe4.dto.UserDto;
+import br.com.backend.equipe4.dto.UserRegisterResponseDto;
 import br.com.backend.equipe4.entity.User;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
 
 
 @Component
 public class UserMapper {
-    public User toEntity(UserDto userDto) {
-        User user = new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setSummary(userDto.getBio());
-        user.setUsername(userDto.getNickname());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setBirthdate(userDto.getBirthDate());
-        return user;
+    public static User toUser(@Valid User RegisterResponseDto) {
+        return new ModelMapper().map(RegisterResponseDto, User.class);
+
+    }
+
+    public static UserRegisterResponseDto toDto(User user) {
+
+        UUID id = user.getId();
+        String fullName = user.getFirstName()+ " " + user.getLastName();
+        PropertyMap<User, UserRegisterResponseDto> props = new PropertyMap<User, UserRegisterResponseDto>() {
+            @Override
+            protected void configure() {
+                map().setId(id);
+                map().setFullname(fullName);
+            }
+        };
+
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.addMappings(props);
+        return mapper.map(user, UserRegisterResponseDto.class);
     }
 }
 
