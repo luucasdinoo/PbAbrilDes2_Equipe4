@@ -1,6 +1,7 @@
 package br.com.backend.equipe4.controllers;
 
 import br.com.backend.equipe4.dto.UserDto;
+import br.com.backend.equipe4.dto.mapper.UserMapper;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.exception.GlobalExceptionHandler;
 import br.com.backend.equipe4.exception.UserAlreadyExistsException;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.backend.equipe4.services.UserService;
@@ -46,19 +48,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
         try {
-            User registeredUser = userService.registerUser(user);
-            Map<String, Object> response = new HashMap<>();
-            response.put("id", registeredUser.getId());
-            response.put("fullName", registeredUser.getFirstName() + " " + registeredUser.getLastName());
-            response.put("username", registeredUser.getUsername());
-            response.put("summary", registeredUser.getSummary());
-            response.put("follows", new ArrayList<>()); // Mock data
-            response.put("followers", new ArrayList<>()); // Mock data
-            response.put("posts", new ArrayList<>()); // Mock data
-            response.put("createdAt", registeredUser.getCreatedAt());
-            response.put("updatedAt", registeredUser.getUpdatedAt());
-
-            return ResponseEntity.ok(response);
+            User registeredUser = userService.registerUser(UserMapper.toUser(user));
+            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(registeredUser));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
