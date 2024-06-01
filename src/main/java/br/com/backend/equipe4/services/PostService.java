@@ -1,7 +1,9 @@
 package br.com.backend.equipe4.services;
 
 import br.com.backend.equipe4.dto.PostCreateDto;
+import br.com.backend.equipe4.entity.Author;
 import br.com.backend.equipe4.entity.Post;
+import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,8 +20,19 @@ public class PostService {
 
     private final ModelMapper modelMapper;
 
+    private final AuthorService authorService;
+
     @Transactional
-    public Post createPost(Post post) {
+    public Post createPost(Post post, User user) {
+
+        Author author = authorService.saveAuthor(new Author(user.getFirstName() + " " + user.getLastName(), user.getUsername()));
+        post.setUser(user);
+        post.setAuthor(author);
+        // author.getPosts().add(post);
+        post.setCreatedAt(LocalDateTime.now());
+        post.setLikes(0);
+        post.setNumberComments(0);
+        post.setRetweets(0);
         return postRepository.save(post);
     }
 

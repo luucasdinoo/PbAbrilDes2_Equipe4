@@ -25,4 +25,9 @@ public class Author implements Serializable {
 
     @OneToMany
     private List<Post> posts = new ArrayList<>();
+
+    public Author(String author, String username) {
+        this.author = author;
+        this.username = username;
+    }
 }

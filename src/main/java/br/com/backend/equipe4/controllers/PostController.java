@@ -40,12 +40,13 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
-    // @PreAuthorize()
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateDto createDto, @AuthenticationPrincipal JwtUserDetails userDetails){
-        Post post = postService.createPost(PostMapper.toPost(createDto));
-         post.setAuthor(PostMapper.toAuthor(userService.getUserByUsername(userDetails.getUsername())));
-         return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toDto(post));
+         Post post = PostMapper.toPost(createDto);
+         User user = userService.getUserByUsername(userDetails.getUsername());
+         Post createdPost = postService.createPost(post, user);
+         return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toDto(createdPost));
     }
 
     @Operation(summary = "Find a post", description = "Method to find a post by ID",

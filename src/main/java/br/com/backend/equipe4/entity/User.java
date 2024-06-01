@@ -1,17 +1,23 @@
 package br.com.backend.equipe4.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class) // Processo de auditoria
 @Getter @Setter @ToString
 public class User implements Serializable {
     @Id
@@ -51,11 +57,17 @@ public class User implements Serializable {
     @Column(name = "role", nullable = false, length = 25)
     private Role role = Role.ROLE_USER;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+/*    @JsonIgnore
+    @OneToMany(mappedBy = "users")
+    private List<Post> posts = new ArrayList<>();*/
 
+    @CreatedBy
+    @Column(name = "created_at")
+    private String createdAt;
+
+    @LastModifiedBy
     @Column(name = "update_at")
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
     public enum Role{
         ROLE_USER

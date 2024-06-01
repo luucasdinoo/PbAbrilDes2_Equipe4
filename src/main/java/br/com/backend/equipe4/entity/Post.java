@@ -25,8 +25,8 @@ public class Post implements Serializable {
     @OneToMany
     private List<Comments> comments = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
-    @OneToOne
+    @JoinColumn(name = "users_id")
+    @ManyToOne
     private User user;
 
     @JoinColumn(name = "author_id")
