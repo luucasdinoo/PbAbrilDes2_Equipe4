@@ -1,16 +1,21 @@
 package br.com.backend.equipe4.dto;
 
-import br.com.backend.equipe4.entity.Author;
-import br.com.backend.equipe4.entity.Comments;
+import br.com.backend.equipe4.entity.Post;
+import lombok.*;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class PostResponseDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
 
-    private Author author;
-    private String text;
-    private int likes;
-    private int retweets;
-    private int numberComments;
-    private List<Comments> comments;
+public class PostResponseDto implements Serializable {
+
+
+    private String id;
+    private String userId;
+    private String authorId;
+    private String author;
+    private Post post;
+
 }

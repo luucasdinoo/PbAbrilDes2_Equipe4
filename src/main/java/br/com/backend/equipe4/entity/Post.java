@@ -1,7 +1,12 @@
 package br.com.backend.equipe4.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name= "posts")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Post implements Serializable {
 
     @Id
@@ -27,10 +33,12 @@ public class Post implements Serializable {
 
     @JoinColumn(name = "users_id")
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @JoinColumn(name = "author_id")
     @ManyToOne
+    @JsonIgnore
     private Author author;
 
     @Column(name = "likes")
@@ -42,9 +50,13 @@ public class Post implements Serializable {
     @Column(name = "number_comments")
     private int numberComments;
 
+    @CreatedDate
     @Column(name = "created_at")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "update_at")
     private LocalDateTime updatedAt;
 

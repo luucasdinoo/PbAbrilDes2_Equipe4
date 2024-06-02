@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,8 @@ public class PostController {
             }
     )
     @PreAuthorize("hasRole('USER')")
-    @GetMapping
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateDto createDto, @AuthenticationPrincipal JwtUserDetails userDetails){
+    @PostMapping
+    public ResponseEntity<PostResponseDto> createPost(@RequestBody @Valid PostCreateDto createDto, @AuthenticationPrincipal JwtUserDetails userDetails){
          Post post = PostMapper.toPost(createDto);
          User user = userService.getUserByUsername(userDetails.getUsername());
          Post createdPost = postService.createPost(post, user);
@@ -62,7 +63,7 @@ public class PostController {
             }
     )
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id){
         Post post = postService.getPostById(id);
         return ResponseEntity.ok(PostMapper.toDto(post));

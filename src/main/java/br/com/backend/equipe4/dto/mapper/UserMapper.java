@@ -19,11 +19,13 @@ public class UserMapper {
 
     public static UserRegisterResponseDto toDto(User user) {
 
+        String role = user.getRole().name().substring("ROLE_".length());
         UUID id = user.getId();
         String fullName = user.getFirstName()+ " " + user.getLastName();
         PropertyMap<User, UserRegisterResponseDto> props = new PropertyMap<User, UserRegisterResponseDto>() {
             @Override
             protected void configure() {
+                map().setRole(role);
                 map().setId(id);
                 map().setFullname(fullName);
             }

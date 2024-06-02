@@ -28,5 +28,6 @@ public class UserRegisterResponseDto {
     private LocalDate birthDate;
     private String createdAt ;
     private String updatedAt;
+    private String role;
 
 }
