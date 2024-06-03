@@ -38,12 +38,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> loginUser(String email, String password) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-
-        return userOptional.filter(user -> passwordEncoder.matches(password, user.getPassword()));
-    }
-
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow((() -> new RuntimeException("Username not found")));
     }
@@ -51,7 +45,49 @@ public class UserService {
     public User.Role getRoleByUsername(String username) {
         return userRepository.findRoleByUsername(username);
     }
+
     public User getUserById(UUID id) {
         return  userRepository.findById(id);
+    }
+
+    public String follow(User followerUser, User followedUser) {
+
+        UUID followerId = followerUser.getId();
+        UUID followedId = followedUser.getId();
+
+        if (followerId.equals(followedId))
+            throw new RuntimeException("You can't follow yourself");
+
+        if (followerUser.getFollows().contains(followedUser))
+            return "You already follow " + followedUser.getUsername();
+
+        followerUser.getFollows().add(followedUser);
+        followedUser.getFollowers().add(followerUser);
+
+        userRepository.save(followerUser);
+        userRepository.save(followedUser);
+
+        return "Now you follow " + followedUser.getUsername();
+
+    }
+
+    public String unfollow(User followerUser, User followedUser) {
+
+        UUID followerId = followerUser.getId();
+        UUID followedId = followedUser.getId();
+
+        if (followerId.equals(followedId))
+            throw new RuntimeException("You can't unfollow yourself");
+
+        if (!followerUser.getFollows().contains(followedUser))
+            return "You do not follow " + followedUser.getUsername();
+
+        followerUser.getFollows().remove(followedUser);
+        followedUser.getFollowers().remove(followerUser);
+
+        userRepository.save(followerUser);
+        userRepository.save(followedUser);
+
+        return "You have unfollowed " + followedUser.getUsername();
     }
 }

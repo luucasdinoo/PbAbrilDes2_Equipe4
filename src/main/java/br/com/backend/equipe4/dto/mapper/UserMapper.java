@@ -1,5 +1,6 @@
 package br.com.backend.equipe4.dto.mapper;
 import br.com.backend.equipe4.dto.ProfileResponseDto;
+import br.com.backend.equipe4.dto.UserPublicDto;
 import br.com.backend.equipe4.dto.UserRegisterResponseDto;
 import br.com.backend.equipe4.entity.User;
 import jakarta.validation.Valid;
@@ -8,7 +9,9 @@ import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
 
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Component

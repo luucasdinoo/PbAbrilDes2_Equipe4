@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class) // Processo de auditoria
+//@EntityListeners(AuditingEntityListener.class) // Processo de auditoria
 @Getter @Setter @ToString
 public class User implements Serializable {
     @Id
@@ -61,13 +60,21 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
-    @CreatedBy
+    @JsonIgnore
+    @OneToMany
+    private List<User> follows = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany
+    private List<User> followers = new  ArrayList<>();
+
+    @CreatedDate
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedBy
     @Column(name = "update_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public enum Role{
         ROLE_USER

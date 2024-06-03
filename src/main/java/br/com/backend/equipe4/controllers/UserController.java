@@ -16,14 +16,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import br.com.backend.equipe4.services.UserService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Tag(name = "Users", description = "All user related methods")
 @RestController
@@ -96,9 +94,12 @@ public class UserController {
             }
     )
     @PostMapping("/follow/{userId}")
-    public ResponseEntity<?> followUser(@PathVariable Long userId) {
-        // Implement follow logic here
-        return ResponseEntity.ok("Followed user " + userId);
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> followUser(@PathVariable UUID userId, @AuthenticationPrincipal JwtUserDetails userDetails) {
+        User followerUser = userService.getUserByUsername(userDetails.getUsername());
+        User followedUser = userService.getUserById(userId);
+        String response = userService.follow(followerUser, followedUser);
+        return ResponseEntity.ok(response);
     }
 
 
@@ -112,13 +113,17 @@ public class UserController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/unfollow/{userId}")
-    public ResponseEntity<?> unfollowUser(@PathVariable Long userId) {
-        // Implement unfollow logic here
-        return ResponseEntity.ok("Unfollowed user " + userId);
+    public ResponseEntity<String> unfollowUser(@PathVariable UUID userId, @AuthenticationPrincipal JwtUserDetails userDetails) {
+        User unfollowerUser = userService.getUserByUsername(userDetails.getUsername());
+        User unfollowedUser = userService.getUserById(userId);
+        String response = userService.unfollow(unfollowerUser, unfollowedUser);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/profile")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal JwtUserDetails user) {
 
         User UserProfile = userService.getUserById(user.getId());

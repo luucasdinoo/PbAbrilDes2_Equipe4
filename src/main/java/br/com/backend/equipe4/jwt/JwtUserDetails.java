@@ -26,4 +26,5 @@ public class JwtUserDetails extends User {
     public String getRole(){
         return this.user.getRole().name();
     }
+
 }
