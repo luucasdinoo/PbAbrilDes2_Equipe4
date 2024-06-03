@@ -3,8 +3,10 @@ package br.com.backend.equipe4.services;
 import br.com.backend.equipe4.dto.PostCreateDto;
 import br.com.backend.equipe4.entity.Author;
 import br.com.backend.equipe4.entity.Post;
+import br.com.backend.equipe4.entity.Repost;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.repositories.PostRepository;
+import br.com.backend.equipe4.repositories.RepostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class PostService {
     private final PostRepository postRepository;
 
     private final ModelMapper modelMapper;
+
+    private final RepostRepository repostRepository;
 
     private final AuthorService authorService;
 
@@ -49,5 +53,15 @@ public class PostService {
         post.setUpdatedAt(LocalDateTime.now());
         modelMapper.map(updateDto, post);
         postRepository.save(post);
+    }
+
+    @Transactional
+    public Repost repost(Post post, User user) {
+        Repost repost = new Repost();
+        repost.setPostId(post.getId());
+        repost.setAuthorName(post.getAuthor().getUsername());
+        repost.setUserId(user.getId());
+        post.setRetweets(post.getRetweets() + 1);
+        return repostRepository.save(repost);
     }
 }

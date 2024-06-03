@@ -2,8 +2,11 @@ package br.com.backend.equipe4.controllers;
 
 import br.com.backend.equipe4.dto.PostCreateDto;
 import br.com.backend.equipe4.dto.PostResponseDto;
+import br.com.backend.equipe4.dto.RepostCreateDto;
 import br.com.backend.equipe4.dto.mapper.PostMapper;
+import br.com.backend.equipe4.dto.mapper.RepostMapper;
 import br.com.backend.equipe4.entity.Post;
+import br.com.backend.equipe4.entity.Repost;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.exception.GlobalExceptionHandler;
 import br.com.backend.equipe4.jwt.JwtUserDetails;
@@ -15,12 +18,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -62,7 +68,7 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id){
         Post post = postService.getPostById(id);
@@ -104,4 +110,15 @@ public class PostController {
         return null;
         //TODO
     }
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+
+    public ResponseEntity<RepostCreateDto> createRepost(@PathVariable Long id, @AuthenticationPrincipal JwtUserDetails user){
+
+        Post post = postService.getPostById(id);
+        User userRepost = userService.getUserByUsername(user.getUsername());
+        Repost repost = postService.repost(post, userRepost);
+        return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(repost,post));
+
+    }
+
 }

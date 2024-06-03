@@ -40,6 +40,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "post/{id}").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(
