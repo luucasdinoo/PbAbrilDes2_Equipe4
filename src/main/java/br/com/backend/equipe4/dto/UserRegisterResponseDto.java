@@ -2,11 +2,7 @@ package br.com.backend.equipe4.dto;
 
 
 import br.com.backend.equipe4.entity.Post;
-import br.com.backend.equipe4.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 import java.time.LocalDate;

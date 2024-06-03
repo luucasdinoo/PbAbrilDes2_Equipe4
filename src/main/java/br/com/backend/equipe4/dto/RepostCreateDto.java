@@ -3,8 +3,6 @@ package br.com.backend.equipe4.dto;
 import br.com.backend.equipe4.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 import java.util.UUID;
 
 @Getter

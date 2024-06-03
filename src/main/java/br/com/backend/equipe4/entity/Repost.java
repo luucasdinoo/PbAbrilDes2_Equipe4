@@ -32,8 +32,5 @@ public class Repost  {
     @Column(name = "user_id")
     private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "postN_id")
-    private Post post;
 
 }
