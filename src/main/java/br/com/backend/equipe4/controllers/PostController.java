@@ -110,7 +110,9 @@ public class PostController {
         return null;
         //TODO
     }
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping( value = "/{id}/repost")
 
     public ResponseEntity<RepostCreateDto> createRepost(@PathVariable Long id, @AuthenticationPrincipal JwtUserDetails user){
 

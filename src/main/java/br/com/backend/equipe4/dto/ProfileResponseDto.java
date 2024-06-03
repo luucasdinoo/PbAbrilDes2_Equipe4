@@ -1,13 +1,10 @@
 package br.com.backend.equipe4.dto;
 
 import br.com.backend.equipe4.entity.Post;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 public class ProfileResponseDto {
