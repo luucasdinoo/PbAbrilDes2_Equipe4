@@ -1,10 +1,12 @@
 package br.com.backend.equipe4.controllers;
 
+import br.com.backend.equipe4.dto.ProfileResponseDto;
 import br.com.backend.equipe4.dto.UserDto;
 import br.com.backend.equipe4.dto.mapper.UserMapper;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.exception.GlobalExceptionHandler;
 import br.com.backend.equipe4.exception.UserAlreadyExistsException;
+import br.com.backend.equipe4.jwt.JwtUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import br.com.backend.equipe4.services.UserService;
 
@@ -113,5 +116,13 @@ public class UserController {
     public ResponseEntity<?> unfollowUser(@PathVariable Long userId) {
         // Implement unfollow logic here
         return ResponseEntity.ok("Unfollowed user " + userId);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal JwtUserDetails user) {
+
+        User UserProfile = userService.getUserById(user.getId());
+
+        return ResponseEntity.ok(UserMapper.toProfileDto(UserProfile));
     }
 }
