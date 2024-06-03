@@ -57,9 +57,9 @@ public class User implements Serializable {
     @Column(name = "role", nullable = false, length = 25)
     private Role role = Role.ROLE_USER;
 
-/*    @JsonIgnore
-    @OneToMany(mappedBy = "users")
-    private List<Post> posts = new ArrayList<>();*/
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
     @CreatedBy
     @Column(name = "created_at")

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class PostService {
         Author author = authorService.getAuthorByUsername(user.getUsername());
         if (author == null)
             author = authorService.saveAuthor(new Author(user.getFirstName() + " " + user.getLastName(), user.getUsername()));
+        List<Post> posts = user.getPosts();
 
         post.setUser(user);
         post.setAuthor(author);
@@ -39,7 +42,7 @@ public class PostService {
         post.setNumberComments(0);
         post.setRetweets(0);
         post.setCreatedAt(LocalDateTime.now());
-        author.getPosts().add(post);
+        posts.add(post);
         return postRepository.save(post);
     }
 

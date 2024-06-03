@@ -1,4 +1,5 @@
 package br.com.backend.equipe4.dto.mapper;
+import br.com.backend.equipe4.dto.ProfileResponseDto;
 import br.com.backend.equipe4.dto.UserRegisterResponseDto;
 import br.com.backend.equipe4.entity.User;
 import jakarta.validation.Valid;
@@ -30,11 +31,16 @@ public class UserMapper {
                 map().setFullname(fullName);
             }
         };
-
-
         ModelMapper mapper = new ModelMapper();
         mapper.addMappings(props);
         return mapper.map(user, UserRegisterResponseDto.class);
     }
+
+    public static ProfileResponseDto toProfileDto(User user) {
+
+        ModelMapper mapper = new ModelMapper();
+        return  mapper.map(user, ProfileResponseDto.class);
+    }
+
 }
 
