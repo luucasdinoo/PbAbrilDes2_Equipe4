@@ -52,11 +52,11 @@ public class Post implements Serializable {
 
     @CreatedDate
     @Column(name = "created_at")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "update_at")
     private LocalDateTime updatedAt;
 

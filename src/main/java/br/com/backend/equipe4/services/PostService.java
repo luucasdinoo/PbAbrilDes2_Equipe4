@@ -7,6 +7,9 @@ import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,9 +48,16 @@ public class PostService {
     }
 
     public void updatePost(Long id, PostCreateDto updateDto) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-        post.setUpdatedAt(LocalDateTime.now());
-        modelMapper.map(updateDto, post);
-        postRepository.save(post);
+
+        Post exitingPost = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        if (!exitingPost.getAuthor().getUsername().equals(currentUsername))
+            throw new AccessDeniedException("You are not authorized to update this post");
+
+        exitingPost.setUpdatedAt(LocalDateTime.now());
+        modelMapper.map(updateDto, exitingPost);
+        postRepository.save(exitingPost);
     }
 }

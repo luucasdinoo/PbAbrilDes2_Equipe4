@@ -81,7 +81,7 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
-    //@PreAuthorize()
+    @PreAuthorize("hasRole('USER')")
     @PatchMapping("/update/{id}")
     public ResponseEntity<Void> updatePost(@RequestBody PostCreateDto updateDto, @PathVariable Long id){
         postService.updatePost(id, updateDto);
