@@ -1,12 +1,14 @@
 package br.com.backend.equipe4.services;
 
+import br.com.backend.equipe4.entity.Post;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -90,4 +92,15 @@ public class UserService {
 
         return "You have unfollowed " + followedUser.getUsername();
     }
+
+    public List<Post> homePage(){
+
+        List<User> users = userRepository.findAll();
+        List<Post> posts = new ArrayList<>();
+        for (User user : users) {
+            posts.addAll(user.getPosts());
+        }
+        return posts;
+    }
+
 }

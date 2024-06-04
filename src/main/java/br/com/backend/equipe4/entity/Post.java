@@ -28,13 +28,19 @@ public class Post implements Serializable {
     private String text;
 
     @Column(name = "comments")
-    @OneToMany
-    private List<Comments> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post")
+
+    private List<Comments> comments;
 
     @JoinColumn(name = "users_id")
     @ManyToOne
     @JsonIgnore
     private User user;
+
+     @ManyToOne
+     @JoinColumn(name = "post_id")
+     @JsonIgnore
+     private Post post;
 
     @JoinColumn(name = "author_id")
     @ManyToOne

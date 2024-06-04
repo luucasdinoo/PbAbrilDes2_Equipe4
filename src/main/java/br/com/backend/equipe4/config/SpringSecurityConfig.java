@@ -41,6 +41,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "post/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/post/home").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(

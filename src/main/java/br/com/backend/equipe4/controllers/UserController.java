@@ -25,7 +25,7 @@ import java.util.*;
 
 @Tag(name = "Users", description = "All user related methods")
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
 public class UserController {
 
     private final UserService userService;
@@ -55,34 +55,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-/*    @Operation(summary = "Login into account", description = "Method for login in application",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Login successfully.",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid email or password",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class))),
-                    @ApiResponse(responseCode = "422", description = "Invalid data",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
-            }
-    )
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginData) {
-        String email = loginData.get("email");
-        String password = loginData.get("password");
-
-        Optional<User> userOptional = userService.loginUser(email, password);
-
-        if (userOptional.isPresent()) {
-            Map<String, String> response = new HashMap<>();
-            response.put("token", "dummy_token"); // Implementar a geração de token JWT
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.badRequest().body("Invalid email or password");
-        }
-    }*/
-
-
     @Operation(summary = "Follow a user", description = "Method to follow a user by their user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successfully followed the user",

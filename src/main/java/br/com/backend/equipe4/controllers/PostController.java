@@ -1,12 +1,11 @@
 package br.com.backend.equipe4.controllers;
 
-import br.com.backend.equipe4.dto.PostCreateDto;
-import br.com.backend.equipe4.dto.PostResponseDto;
-import br.com.backend.equipe4.dto.RepostCreateDto;
+import br.com.backend.equipe4.dto.*;
+import br.com.backend.equipe4.dto.mapper.CommentMapper;
 import br.com.backend.equipe4.dto.mapper.PostMapper;
 import br.com.backend.equipe4.dto.mapper.RepostMapper;
+import br.com.backend.equipe4.entity.Comments;
 import br.com.backend.equipe4.entity.Post;
-import br.com.backend.equipe4.entity.Repost;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.exception.GlobalExceptionHandler;
 import br.com.backend.equipe4.jwt.JwtUserDetails;
@@ -20,11 +19,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -106,21 +107,35 @@ public class PostController {
     )
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/home")
-    public ResponseEntity<Void> getPostsHome(){
-        return null;
-        //TODO
+    public ResponseEntity<List<HomeResponseDto>> home(){
+        List<Post> posts =userService.homePage();
+        List<HomeResponseDto> homeResponseDtos = new ArrayList<>();
+        for( Post post : posts ){
+            homeResponseDtos.add(PostMapper.toHome(post));
+        }
+
+        return ResponseEntity.ok().body(homeResponseDtos);
+
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping( value = "/{id}/repost")
 
+
     public ResponseEntity<RepostCreateDto> createRepost(@PathVariable Long id, @AuthenticationPrincipal JwtUserDetails user){
 
-        Post post = postService.getPostById(id);
-        User userRepost = userService.getUserByUsername(user.getUsername());
-        Repost repost = postService.repost(post, userRepost);
-        return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(repost,post));
+        Post rePost = postService.getPostById(id);
+        User userRepost = userService.getUserById(user.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(postService.repost(rePost, userRepost)));
 
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping( value = "/{id}/comment")
+    public ResponseEntity<CommentResponseDto> comentPost(@PathVariable Long id, @RequestBody @Valid CommnetCreateDto createcommentDto, @AuthenticationPrincipal JwtUserDetails userDetails){
+
+      Comments comments =  postService.postComment(CommentMapper.toComment(createcommentDto),userService.getUserById(userDetails.getId()),postService.getPostById(id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(CommentMapper.toCommnetCreateDto(comments));
     }
 
 }
