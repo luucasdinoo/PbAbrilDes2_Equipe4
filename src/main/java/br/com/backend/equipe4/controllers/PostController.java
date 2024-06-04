@@ -26,6 +26,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/post")
@@ -104,11 +106,12 @@ public class PostController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
             }
     )
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping("/home")
-    public ResponseEntity<Void> getPostsHome(){
-        return null;
-        //TODO
+    public ResponseEntity<List<Post>> home(){
+        List<Post> posts =userService.homePage();
+        return ResponseEntity.ok().body(posts);
+
     }
 
     @PreAuthorize("hasRole('USER')")
