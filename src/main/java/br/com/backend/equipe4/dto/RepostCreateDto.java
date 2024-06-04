@@ -9,7 +9,7 @@ import java.util.UUID;
 @Setter
 public class RepostCreateDto {
 
-    private Long Id;
+    private Long id;
     private Long postId;
     private UUID userId;
     private String authorName;

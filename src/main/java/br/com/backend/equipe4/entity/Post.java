@@ -36,6 +36,11 @@ public class Post implements Serializable {
     @JsonIgnore
     private User user;
 
+     @ManyToOne
+     @JoinColumn(name = "post_id")
+     @JsonIgnore
+     private Post post;
+
     @JoinColumn(name = "author_id")
     @ManyToOne
     @JsonIgnore

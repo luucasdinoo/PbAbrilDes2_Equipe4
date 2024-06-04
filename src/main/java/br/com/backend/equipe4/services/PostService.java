@@ -7,6 +7,7 @@ import br.com.backend.equipe4.entity.Repost;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.repositories.PostRepository;
 import br.com.backend.equipe4.repositories.RepostRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,12 +70,19 @@ public class PostService {
     }
 
     @Transactional
-    public Repost repost(Post post, User user) {
-        Repost repost = new Repost();
-        repost.setPostId(post.getId());
-        repost.setAuthorName(post.getAuthor().getUsername());
-        repost.setUserId(user.getId());
+    public Post repost(Post post, User user) {
+        Post repost = new Post();
+        List<Post> posts = user.getPosts();
+        repost.setText(post.getText());
+        repost.setUser(user);
+        repost.setAuthor(post.getAuthor());
+        repost.setLikes(post.getLikes());
+        repost.setNumberComments(post.getNumberComments());
+        repost.setRetweets(post.getRetweets());
+        repost.setCreatedAt(post.getCreatedAt());
         post.setRetweets(post.getRetweets() + 1);
-        return repostRepository.save(repost);
+        posts.add(repost);
+        repost.setPost(post);
+        return postRepository.save(repost);
     }
 }

@@ -114,12 +114,12 @@ public class PostController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping( value = "/{id}/repost")
 
+
     public ResponseEntity<RepostCreateDto> createRepost(@PathVariable Long id, @AuthenticationPrincipal JwtUserDetails user){
 
-        Post post = postService.getPostById(id);
-        User userRepost = userService.getUserByUsername(user.getUsername());
-        Repost repost = postService.repost(post, userRepost);
-        return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(repost,post));
+        Post rePost = postService.getPostById(id);
+        User userRepost = userService.getUserById(user.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(postService.repost(rePost, userRepost)));
 
     }
 

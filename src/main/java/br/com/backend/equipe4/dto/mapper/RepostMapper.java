@@ -1,26 +1,17 @@
 package br.com.backend.equipe4.dto.mapper;
 
 
-import br.com.backend.equipe4.dto.PostCreateDto;
+
 import br.com.backend.equipe4.dto.RepostCreateDto;
-import br.com.backend.equipe4.entity.Post;
-import br.com.backend.equipe4.entity.Repost;
+import br.com.backend.equipe4.entity.Post;;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.modelmapper.ModelMapper;
 
 public class RepostMapper {
 
-    public static Repost toRepost(RepostCreateDto dto){
-        return new ModelMapper().map(dto, Repost.class);
+    @JsonIgnore
+    public static RepostCreateDto toDto(Post post){
+        return new ModelMapper().map(post, RepostCreateDto.class);
     }
 
-    public static RepostCreateDto toDto(Repost repost, Post post){
-        RepostCreateDto dto = new RepostCreateDto();
-        dto.setId(repost.getId());
-        dto.setPostId(repost.getPostId());
-        dto.setAuthorName(repost.getAuthorName());
-        dto.setUserId(repost.getUserId());
-        dto.setPost(post);
-
-        return dto;
-    }
 }
