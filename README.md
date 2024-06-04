@@ -74,3 +74,25 @@ springdoc:
     path: /docs-d2
   packagesToScan: br.com.backend.equipe4.controllers
 ```
+Docker config
+
+Abra o projeto em seu IDE
+
+ Configure seu JDK
+
+5: Antes de prosseguir para a etapa final você deve definir as configurações do seu banco de dados no arquivo "application.properties" que está localizado na pasta RESOURCES (se estiver usando o docker esteja atento para ajustar também o arquivo DockerCompose).
+
+6: O último passo é compilar e executar o programa seguindo os passos MAVEN -> PLUGINS -> SPRINGBOOT -> SPRINGBOOT: RUN
+
+Instalação do Docker e uso do postgres
+1: Primeiro é necessário instalar o docker visitando o site https://www.docker.com/
+
+2: Após a instalação, você deve executar o docker e visitar novamente o site https://hub.docker.com/, e criar uma conta para poder usar a imagem do docker postgres
+
+3: Agora você tem que abrir seu terminal e colocar bash ''' docker run --name (docker container name) -p 5432:5432 -e POSTGRES_PASSWORD=(sua senha) -d postgres '''
+
+4: Então você tem um contêiner docker rodando com uma imagem postgres nele.
+
+5: Abra seu dbms, procure criar uma nova conexão
+
+6: E seu DBMS está vinculado à imagem DOCKER postgres!
