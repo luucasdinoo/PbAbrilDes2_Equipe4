@@ -30,14 +30,16 @@ Spring Boot:
 - IDEA FOR JAVA
 
 ## Instalation
+
  ```bash
+
     git clone https://github.com/luucasdinoo/PbAbrilDes2_Equipe4.git
 
-    ```
+  
     cd -PbAbrilDes1_PedroSantos
     ```
     or
-   ```bash
+  
    cd .\-PbAbrilDes1_PedroSantos\
  
     *Note: remember to run the cd command inside the directory where the repository was cloned*
