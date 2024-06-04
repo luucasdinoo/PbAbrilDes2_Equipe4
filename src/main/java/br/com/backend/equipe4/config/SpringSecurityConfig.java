@@ -39,7 +39,7 @@ public class SpringSecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "post/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/post/home").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()

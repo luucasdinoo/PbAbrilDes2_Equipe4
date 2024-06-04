@@ -118,7 +118,18 @@ public class PostController {
 
     }
 
-    @PreAuthorize("hasRole('USER')")
+
+    @Operation(summary = "Make a repost", description = "Method to make a repost",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Repost made successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RepostCreateDto.class  ))),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class))),
+                    @ApiResponse(responseCode = "422", description = "Invalid data",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
+            }
+    )
+                    @PreAuthorize("hasRole('USER')")
     @PostMapping( value = "/{id}/repost")
 
 
@@ -130,6 +141,16 @@ public class PostController {
 
     }
 
+    @Operation(summary = "Make a comment", description = "Method to make comment on posts",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Comment made successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RepostCreateDto.class  ))),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class))),
+                    @ApiResponse(responseCode = "422", description = "Invalid data",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
+            }
+    )
     @PreAuthorize("hasRole('USER')")
     @PostMapping( value = "/{id}/comment")
     public ResponseEntity<CommentResponseDto> comentPost(@PathVariable Long id, @RequestBody @Valid CommnetCreateDto createcommentDto, @AuthenticationPrincipal JwtUserDetails userDetails){

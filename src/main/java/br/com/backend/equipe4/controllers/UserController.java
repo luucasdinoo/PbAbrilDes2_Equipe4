@@ -1,5 +1,6 @@
 package br.com.backend.equipe4.controllers;
 
+import br.com.backend.equipe4.dto.PostResponseDto;
 import br.com.backend.equipe4.dto.ProfileResponseDto;
 import br.com.backend.equipe4.dto.UserDto;
 import br.com.backend.equipe4.dto.mapper.UserMapper;
@@ -25,7 +26,6 @@ import java.util.*;
 
 @Tag(name = "Users", description = "All user related methods")
 @RestController
-@RequestMapping()
 public class UserController {
 
     private final UserService userService;
@@ -94,6 +94,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Find a profile", description = "Method to find a profile by ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Profile retrieved successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class))),
+                    @ApiResponse(responseCode = "404", description = "Profile not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class))),
+                    @ApiResponse(responseCode = "422", description = "Invalid data",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = GlobalExceptionHandler.class)))
+            }
+    )
     @GetMapping("/profile")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal JwtUserDetails user) {

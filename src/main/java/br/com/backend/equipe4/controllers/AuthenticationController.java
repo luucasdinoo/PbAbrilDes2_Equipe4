@@ -3,6 +3,7 @@ package br.com.backend.equipe4.controllers;
 import br.com.backend.equipe4.dto.UserLoginDto;
 import br.com.backend.equipe4.jwt.JwtToken;
 import br.com.backend.equipe4.jwt.JwtUserDetailsServices;
+import br.com.backend.equipe4.services.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class AuthenticationController {
 
     private final JwtUserDetailsServices detailsService;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
     @PostMapping
     public ResponseEntity<?> auth(@RequestBody @Valid UserLoginDto dto, HttpServletRequest request) {
@@ -41,4 +43,19 @@ public class AuthenticationController {
         return  ResponseEntity.badRequest().build();
     }
 
+    
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+
+            token = token.substring(7);
+            tokenService.invalidateToken(token);
+            log.info("Logout made successfully: {}", token);
+            return ResponseEntity.ok().build();
+
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }
