@@ -1,11 +1,10 @@
 package br.com.backend.equipe4.controllers;
 
-import br.com.backend.equipe4.dto.HomeResponseDto;
-import br.com.backend.equipe4.dto.PostCreateDto;
-import br.com.backend.equipe4.dto.PostResponseDto;
-import br.com.backend.equipe4.dto.RepostCreateDto;
+import br.com.backend.equipe4.dto.*;
+import br.com.backend.equipe4.dto.mapper.CommentMapper;
 import br.com.backend.equipe4.dto.mapper.PostMapper;
 import br.com.backend.equipe4.dto.mapper.RepostMapper;
+import br.com.backend.equipe4.entity.Comments;
 import br.com.backend.equipe4.entity.Post;
 import br.com.backend.equipe4.entity.User;
 import br.com.backend.equipe4.exception.GlobalExceptionHandler;
@@ -129,6 +128,14 @@ public class PostController {
         User userRepost = userService.getUserById(user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(RepostMapper.toDto(postService.repost(rePost, userRepost)));
 
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping( value = "/{id}/comment")
+    public ResponseEntity<CommentResponseDto> comentPost(@PathVariable Long id, @RequestBody @Valid CommnetCreateDto createcommentDto, @AuthenticationPrincipal JwtUserDetails userDetails){
+
+      Comments comments =  postService.postComment(CommentMapper.toComment(createcommentDto),userService.getUserById(userDetails.getId()),postService.getPostById(id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(CommentMapper.toCommnetCreateDto(comments));
     }
 
 }

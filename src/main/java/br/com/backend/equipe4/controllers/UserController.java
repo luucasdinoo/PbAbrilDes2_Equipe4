@@ -55,7 +55,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
     @Operation(summary = "Follow a user", description = "Method to follow a user by their user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successfully followed the user",
